@@ -1,0 +1,16 @@
+# Không đưa lên repo
+PROGRESS.md
+rf-sig-gen/
+docs/
+
+# Sản phẩm build kernel module
+*.o
+*.ko
+*.mod
+*.mod.c
+*.cmd
+.*.cmd
+*.dtbo
+Module.symvers
+modules.order
+.tmp_versions/

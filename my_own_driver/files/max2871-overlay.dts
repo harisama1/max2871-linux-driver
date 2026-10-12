@@ -1,0 +1,51 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    /* disable spi-dev for spi0.0 */
+    fragment@1 {
+	    target = <&spidev0>;
+	    __overlay__ {
+	        status = "disabled";
+	    };
+    };
+
+    fragment@2 {
+        target = <&spi0>;
+        __overlay__ {
+            /* needed to avoid dtc warning */
+            #address-cells = <1>;
+            #size-cells = <0>;
+            max2871@0 {
+                reg = <0>;
+                compatible = "maxim,max2871";
+                spi-max-frequency = <10000000>;
+                ce-gpios = <&gpio 5 0>;
+                rfout-en-gpios = <&gpio 6 0>;
+                ld-gpios = <&gpio 13 32>;
+                clocks = <&max2871_ref>;
+            };
+        };
+    };
+
+    	fragment@3 {
+		target-path = "/";
+		__overlay__ {
+			max2871_ref: max2871-ref-clock{
+                compatible = "fixed-clock";
+                #clock-cells = <0>;
+                clock-frequency = <19200000>; //This param is unkown bcs i have not got board yet
+            };
+        };
+	};
+
+
+};

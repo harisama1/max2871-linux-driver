@@ -1,0 +1,36 @@
+/* Cách 1: Device Tree overlay */
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	fragment@1 {
+		target = <&spidev0>;		/* giải phóng CS0 cho MAX2871 */
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	fragment@2 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			max2871@0 {
+				compatible = "temix,max2871";	/* -> modalias "max2871" */
+				reg = <0>;			/* -> chip_select = 0 */
+				spi-max-frequency = <10000000>;	/* -> max_speed_hz */
+				/* không có spi-cpol/spi-cpha  -> mode = SPI_MODE_0 */
+			};
+		};
+	};
+};
